@@ -1,4 +1,18 @@
-console.log('Hello I am from JS');
+const createElements = (arr) =>{
+    const htmlElements = arr.map((el) => `<span class = "btn">${el}</span>`);
+    return (htmlElements.join( " " ));
+};
+
+const manageSpinner = (status) =>{
+     if(status == true){
+        document.getElementById('spinner').classList.remove("hidden");
+        document.getElementById('word-container').classList.add("hidden");
+     }
+     else{
+         document.getElementById('word-container').classList.remove("hidden");
+        document.getElementById('spinner').classList.add("hidden");
+     }
+}
 
 const loadLessons = () => {
     fetch('https://openapi.programming-hero.com/api/levels/all')
@@ -13,6 +27,7 @@ const removeActive = () =>{
 
 //fetch word by level
 const loadLevelWord = (id) =>{
+    manageSpinner(true);
         fetch(`https://openapi.programming-hero.com/api/level/${id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -47,9 +62,7 @@ const displayWordDetails = (word) =>{
                 </div>
                 <div class="">
                     <h2>সমার্থক শব্দ গুলো</h2>
-                    <span class="btn bg-[#1A91FF10]">${word.synonyms[0]}</span>
-                    <span class="btn bg-[#1A91FF10]">${word.synonyms[1]}</span>
-                    <span class="btn bg-[#1A91FF10]">${word.synonyms[2]}</span>
+                    <div>${createElements(word.synonyms)}</div>
                 </div>
         `;
         document.getElementById("my_modal_5").showModal();
@@ -86,7 +99,9 @@ const displayLevelWord = (words) =>{
         wordContainer.append(card);
      });
      }
-}
+    manageSpinner(false);
+};
+
 //fetch all levels
 const displayLessons = (lessons) => {
     const levelContainer = document.getElementById('level-container');
